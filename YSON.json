@@ -1,0 +1,42 @@
+{
+    "udp": {
+        "__node__": {
+            "name": "udp",
+            "type": "container"
+        },
+        "host": {
+            "__node__": {
+                "name": "host",
+                "type": "leaf",
+                "value_type": "string"
+            }
+        },
+        "port": {
+            "__node__": {
+                "name": "port",
+                "type": "leaf",
+                "value_type": "uint16"
+            }
+        }
+    },
+    "tcp": {
+        "__node__": {
+            "name": "tcp",
+            "type": "container"
+        },
+        "port": {
+            "__node__": {
+                "name": "port",
+                "type": "leaf",
+                "value_type": "uint16"
+            }
+        },
+        "host": {
+            "__node__": {
+                "name": "host",
+                "type": "leaf",
+                "value_type": "list"
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+	"toolBar.py": {
+		"openBtn": {
+			"balloonMsg": "Open file..."
+		},
+		"openURL": {
+			"balloonMsg": "Open file from URL..."
+		},
+		"saveBtn": {
+			"balloonMsg": "Save file"
+		},
+		"closeBtn": {
+			"balloonMsg": "Closes the selected file."
+		},
+		"pathBtn": {
+			"balloonMsg": "Opens the Path Browser."
+		},
+		"regBtn": {
+			"balloonMsg": "Opens the Reg Browser. (Only on Windows)"
+		},
+		"exitBtn": {
+			"balloonMsg": "Quits YangEdit."
+		}
+	}
+}

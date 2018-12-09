@@ -1,0 +1,21 @@
+- bestimmte typen ausblenden lassen
+
+X session restore fixen
+
+X sortieren
+
+X keyLeaf icon
+
+X container2dict
+
+- robot-framework syntax angucken
+
+X modul anzeigen lassen
+
+- suche fertigstellen
+
+X add help balloons
+
+X add close button for each editFrame
+
+X open file from URL
