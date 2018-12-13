@@ -25,6 +25,13 @@ def getNewestVersion():
         if hasattr(data, "decode"):
             return data.decode()
 
+def copyFiles(src, dest):
+    for file in os.listdir(src):
+        fileName = os.path.join(src, file)
+
+        if os.path.isfile(fileName): shutil.copy(fileName, dest)
+        else: shutil.copytree(fileName, os.path.join(dest, file))
+
 class yangEditUpdater(tk.Tk):
 
     def __init__(self, master=None):
@@ -78,6 +85,10 @@ class yangEditUpdater(tk.Tk):
         zipFile.extractall()
         zipFile.close()
 
+        copyFiles("yangEdit-master", ".")
+
+        shutil.rmtree("yangEdit-master")
+
         shutil.rmtree("data/JSON")
         shutil.copytree("JSON", "data/JSON")
 
@@ -87,8 +98,8 @@ class yangEditUpdater(tk.Tk):
 
         self.destroy()
 
-versionURL = "http://download1595.mediafire.com/tmcf51aefvxg/1udv6xrqpd7gg2t/version.txt"
-yangEditURL = "http://download2263.mediafire.com/656p8l1wpdig/cnbw28wuy2l8crw/yangEdit.zip"
+versionURL = "https://raw.githubusercontent.com/letsCodeMyLife/yangEdit/master/version.txt"
+yangEditURL = "https://github.com/letsCodeMyLife/yangEdit/archive/master.zip"
 
 def main(master=None):
     cMajor, cMinor = getCurrentVersion().split(".")
