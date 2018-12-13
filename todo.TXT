@@ -19,3 +19,5 @@ X add help balloons
 X add close button for each editFrame
 
 X open file from URL
+
+- updates auf github
