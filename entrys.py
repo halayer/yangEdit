@@ -31,6 +31,7 @@ class validatingEntry(tk.Entry):
         return value
 
 
+# A entry only accepting integer input
 class intEntry(validatingEntry):
 
     def __init_(self, master=None, value="", range=(None, None), callback=None, **kw):
