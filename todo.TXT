@@ -20,4 +20,12 @@ X add close button for each editFrame
 
 X open file from URL
 
-- updates auf github
+X updates auf github
+
+- add master dict
+
+- list icon
+
+- robot-snippet icon
+
+- robot-snippet fixen
