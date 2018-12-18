@@ -27,6 +27,7 @@ from urllib.request import urlopen
 import traceback
 import notebook
 import updater
+import dict2robot
 
 getExc = traceback.format_exc
 
@@ -264,6 +265,36 @@ class yangEditApp(tix.Tk):
         copyBtn = ttk.Button(root, text="Copy",
                              command=copyToClip)
         copyBtn.pack(fill=tk.BOTH)
+
+    def robotSnippet(self):
+        def copyToClip():
+            root.clipboard_clear()
+            root.clipboard_append(data)
+            
+        sel = self.tabView.select()
+        
+        try:
+            data = json.dumps(
+                self.tabDict[self.tabView.tab(sel, "text")].jsonObj,
+                indent=4
+            )
+        except:
+            return
+
+        data = dict2robot.dict2robot(data)
+
+        root = tk.Toplevel(self)
+        root.title("data2dict")
+        root.iconbitmap("data/icon.ico")
+
+        st = tkst.ScrolledText(root)
+
+        st.insert(tk.END, data)
+        st.pack(fill=tk.BOTH,expand=True)
+
+        copyBtn = ttk.Button(root, text="Copy",
+                             command=copyToClip)
+        copyBtn.pack(fill=tk.BOTH)
         
     def _tabMenu(self, event):
         ID = self.tabView.identify(event.x, event.y)
@@ -316,6 +347,7 @@ class yangEditApp(tix.Tk):
                                    state=tk.DISABLED if not regAvailable else tk.NORMAL,
                                    image=self.regImg, compound=tk.LEFT,
                                    underline=0)
+        self.extraMenu.add_command(label="Robot Snippet", command=self.robotSnippet)
 
         self.menu.add_cascade(label="File", menu=self.fileMenu)
         self.menu.add_cascade(label="Edit", menu=self.editMenu)
