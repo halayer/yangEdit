@@ -301,6 +301,8 @@ class editFrame(tk.Frame):
             return
         elif type(self.jsonObj) == dict:
             for k, v in self.jsonObj.items():
+                if k == "__node__": continue
+                
                 self._advancedInsert(v, name=k)
 
             return
