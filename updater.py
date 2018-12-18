@@ -77,7 +77,7 @@ class yangEditUpdater(tk.Tk):
 
         for i in os.listdir():
             if not i == "yangEdit.zip" and not i == "JSON" \
-            and not i == "updater.py":
+            and not i == "updater.py" and not i == "makeUpdate.py":
                 if os.path.isfile(i): os.unlink(i)
                 else: shutil.rmtree(i)
 
