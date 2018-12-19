@@ -186,6 +186,8 @@ class yangEditApp(tix.Tk):
         self.dirImg = tk.PhotoImage(file="data/folder.gif")
         self.regImg = tk.PhotoImage(file="data/reg.png")
 
+        self.robotImg = tk.PhotoImage(file="data/robot.png")
+
     def save(self, event=None): # 'event' is not used
         sel = self.tabView.select()
 
@@ -262,7 +264,9 @@ class yangEditApp(tix.Tk):
         st.insert(tk.END, data)
         st.pack(fill=tk.BOTH,expand=True)
 
-        copyBtn = ttk.Button(root, text="Copy",
+        st.config(state=tk.DISABLED)
+
+        copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
         copyBtn.pack(fill=tk.BOTH)
 
@@ -274,25 +278,24 @@ class yangEditApp(tix.Tk):
         sel = self.tabView.select()
         
         try:
-            data = json.dumps(
-                self.tabDict[self.tabView.tab(sel, "text")].jsonObj,
-                indent=4
-            )
+            data = self.tabDict[self.tabView.tab(sel, "text")].jsonObj
         except:
             return
 
         data = dict2robot.dict2robot(data)
 
         root = tk.Toplevel(self)
-        root.title("data2dict")
-        root.iconbitmap("data/icon.ico")
+        root.title("Robot Snippet")
+        root.iconbitmap("data/robot.ico")
 
         st = tkst.ScrolledText(root)
 
         st.insert(tk.END, data)
         st.pack(fill=tk.BOTH,expand=True)
 
-        copyBtn = ttk.Button(root, text="Copy",
+        st.config(state=tk.DISABLED)
+
+        copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
         copyBtn.pack(fill=tk.BOTH)
         
@@ -347,7 +350,8 @@ class yangEditApp(tix.Tk):
                                    state=tk.DISABLED if not regAvailable else tk.NORMAL,
                                    image=self.regImg, compound=tk.LEFT,
                                    underline=0)
-        self.extraMenu.add_command(label="Robot Snippet", command=self.robotSnippet)
+        self.extraMenu.add_command(label="Robot Snippet", command=self.robotSnippet,
+                                   image=self.robotImg, compound=tk.LEFT)
 
         self.menu.add_cascade(label="File", menu=self.fileMenu)
         self.menu.add_cascade(label="Edit", menu=self.editMenu)
