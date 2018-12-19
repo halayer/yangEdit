@@ -8,8 +8,6 @@ X keyLeaf icon
 
 X container2dict
 
-- robot-framework syntax angucken
-
 X modul anzeigen lassen
 
 - suche fertigstellen
@@ -22,10 +20,10 @@ X open file from URL
 
 X updates auf github
 
-- add master dict
+: add master dict
 
-- list icon
+X list icon
 
-- robot-snippet icon
+X robot-snippet icon
 
-- robot-snippet fixen
+X robot-snippet fixen
