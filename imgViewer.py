@@ -1,9 +1,7 @@
 try:
     import tkinter as tk
-    from tkinter import messagebox as msgBox
 except: # Python 2.x
     import Tkinter as tk
-    import tkMessageBox as msgBox
 
 import os
 
