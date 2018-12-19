@@ -28,6 +28,7 @@ import traceback
 import notebook
 import updater
 import dict2robot
+import utils
 
 getExc = traceback.format_exc
 
@@ -268,7 +269,11 @@ class yangEditApp(tix.Tk):
 
         copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
+        saveBtn = ttk.Button(root, text="Save As...",
+                             command=lambda: utils.saveAs(data))
+        
         copyBtn.pack(fill=tk.BOTH)
+        saveBtn.pack(fill=tk.BOTH)
 
     def robotSnippet(self):
         def copyToClip():
@@ -297,7 +302,11 @@ class yangEditApp(tix.Tk):
 
         copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
+        saveBtn = ttk.Button(root, text="Save As...",
+                             command=lambda: utils.saveAs(data))
+    
         copyBtn.pack(fill=tk.BOTH)
+        saveBtn.pack(fill=tk.BOTH)
         
     def _tabMenu(self, event):
         ID = self.tabView.identify(event.x, event.y)
