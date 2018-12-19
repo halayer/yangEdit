@@ -19,6 +19,7 @@ import pathBrowser
 import refTypes
 import settings
 import dict2robot
+import utils
 import os
 
 NoneType = type(None)
@@ -443,7 +444,11 @@ class editFrame(tk.Frame):
 
         copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
+        saveBtn = ttk.Button(root, text="Save As...",
+                             command=lambda: utils.saveAs(data))
+        
         copyBtn.pack(fill=tk.BOTH)
+        saveBtn.pack(fill=tk.BOTH)
 
     def robotSnippet(self, index):
         data = dict2robot.dict2robot(self._getAt(index))
@@ -465,7 +470,11 @@ class editFrame(tk.Frame):
 
         copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
+        saveBtn = ttk.Button(root, text="Save As...",
+                             command=lambda: utils.saveAs(data))
+        
         copyBtn.pack(fill=tk.BOTH)
+        saveBtn.pack(fill=tk.BOTH)
 
     def _changeSel(self, event=None): # 'event' is unused
         sel = self.tree.tree.selection()
