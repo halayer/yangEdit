@@ -21,22 +21,24 @@ def crawlDict(aDict, robotString, varName, type=None):
             if yangTools.type(v).upper() == "LEAF":                    
                 robotString.append(WS.join(["Set To Dictionary", varName,
                                             k, EMPTY]))
-            elif yangTools.type(v).upper() == "LEAFLIST":
+            elif yangTools.type(v).upper() in ["LEAFLIST", "LEAF-LIST"]:
                 robotString.append(WS.join(["Set To Dictionary", varName,
                                             k, EMPTY_LIST]))
             else:
                 _varName = k + "_" + yangTools.type(v)
 
-                crawlDict(v, robotString, _varName)
+                robotString = crawlDict(v, robotString, _varName)
                     
                 robotString.append(WS.join(["Set To Dictionary", varName,
                                             k, "${" + _varName + "}"]))
     elif type == "LIST":
         robotString.append(varName + WS + "Create List")
 
-        crawlDict(aDict, robotString, rawVarName + "_item", "CONTAINER")
+        robotString = crawlDict(aDict, robotString, rawVarName + "_item", "CONTAINER")
 
         robotString.append("Append To List" + WS + varName + WS + "${" + rawVarName + "_item}")
+
+    return robotString
     
 ##    for k, v in aDict.items():
 ##        _type = yangTools.type(v).upper()
@@ -67,7 +69,7 @@ def dict2robot(aDict):
 
     robotString.append("${EMTPY_LIST}" + WS + "Create List")
 
-    crawlDict(aDict, robotString, "master_dict")
+    robotString = crawlDict(aDict, robotString, "master_dict")
 
     return "\n".join(robotString)
 
