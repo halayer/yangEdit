@@ -18,6 +18,7 @@ import propPanel
 import pathBrowser
 import refTypes
 import settings
+import dict2robot
 import os
 
 NoneType = type(None)
@@ -71,14 +72,17 @@ class editFrame(tk.Frame):
         self.bellImg = tk.PhotoImage(file="data/notification.png")
         self.anyXmlImg = tk.PhotoImage(file="data/anyxml.png")
         self.keyLeafImg = tk.PhotoImage(file="data/keyLeaf.png")
+        self.arrayImg = tk.PhotoImage(file="data/array.png")
 
         self.triImg = tk.PhotoImage(file="data/triangle.png")
+        self.robotImg = tk.PhotoImage(file="data/robot.png")
 
         self.typeImgs = {"container": self.containerImg, "leaf": self.leafImg,
                          "leaf-list": self.leafListImg, "choice": self.choiceImg,
                          "case": self.caseImg, "output": self.outputImg,
                          "input": self.inputImg, "notification": self.bellImg,
-                         "anyxml": self.anyXmlImg, "leaf (key)": self.keyLeafImg}
+                         "anyxml": self.anyXmlImg, "leaf (key)": self.keyLeafImg,
+                         "list": self.arrayImg, "leaflist": self.leafListImg}
 
         self.valueTypeImgs = {"string": self.strImg, "uint64": self.intImg,
                               "uint32": self.intImg, "uint16": self.intImg,
@@ -321,7 +325,7 @@ class editFrame(tk.Frame):
         item = self.tree.tree.item(index)
 
         if not index: return
-        
+
         retList = [self.realNames[index]]
 
         while self._hasParent(index):
@@ -383,6 +387,17 @@ class editFrame(tk.Frame):
             menu.add_command(label="YANG Properties",
                              state=tk.DISABLED,
                              image=self.triImg, compound=tk.LEFT)
+            menu.add_command(label="Set YANG Properties",
+                             command=lambda: self._setProps(index, sel, event),
+                             image=self.triImg, compound=tk.LEFT, state=tk.DISABLED)
+            menu.add_command(label="container2dict",
+                             command=lambda: self.container2dict(index),
+                             image=self.containerImg, compound=tk.LEFT,
+                             state=tk.DISABLED)
+            menu.add_command(label="Robot Snippet",
+                             command=lambda: self.robotSnippet(index),
+                             image=self.robotImg, compound=tk.LEFT,
+                             state=tk.DISABLED)
         else:
             props = self._getAt(propsIndex)
             
@@ -397,6 +412,9 @@ class editFrame(tk.Frame):
                              image=self.containerImg, compound=tk.LEFT,
                              state=tk.NORMAL if props.get("type", "").upper() \
                              == "CONTAINER" else tk.DISABLED)
+            menu.add_command(label="Robot Snippet",
+                             command=lambda: self.robotSnippet(index),
+                             image=self.robotImg, compound=tk.LEFT)
 
         menu.tk_popup(event.x_root, event.y_root)
 
@@ -421,7 +439,31 @@ class editFrame(tk.Frame):
         st.insert(tk.END, data)
         st.pack(fill=tk.BOTH,expand=True)
 
-        copyBtn = ttk.Button(root, text="Copy",
+        st.config(state=tk.DISABLED)
+
+        copyBtn = ttk.Button(root, text="Copy All",
+                             command=copyToClip)
+        copyBtn.pack(fill=tk.BOTH)
+
+    def robotSnippet(self, index):
+        data = dict2robot.dict2robot(self._getAt(index))
+
+        def copyToClip():
+            root.clipboard_clear()
+            root.clipboard_append(data)
+        
+        root = tk.Toplevel(self)
+        root.title("Robot Snippet")
+        root.iconbitmap("data/robot.ico")
+
+        st = tkst.ScrolledText(root)
+
+        st.insert(tk.END, data)
+        st.pack(fill=tk.BOTH,expand=True)
+
+        st.config(state=tk.DISABLED)
+
+        copyBtn = ttk.Button(root, text="Copy All",
                              command=copyToClip)
         copyBtn.pack(fill=tk.BOTH)
 
