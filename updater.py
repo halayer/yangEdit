@@ -46,12 +46,12 @@ class yangEditUpdater(tk.Tk):
 
     def download(self):
         shutil.copytree("data/JSON", "JSON")
+
+        f = urlopen(yangEditURL)
+        cl = len(f.read())
         
         inFile = open("yangEdit.zip", "wb")
         outFile = urlopen(yangEditURL)
-
-        html = outFile.info()
-        cl = html["Content-Length"]
 
         progress = 0
         self.prgrBar.start()
