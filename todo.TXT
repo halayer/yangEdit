@@ -1,29 +1,7 @@
-- bestimmte typen ausblenden lassen
-
-X session restore fixen
-
-X sortieren
-
-X keyLeaf icon
-
-X container2dict
-
-X modul anzeigen lassen
-
-- suche fertigstellen
-
-X add help balloons
-
-X add close button for each editFrame
-
-X open file from URL
-
-X updates auf github
+X bestimmte typen ausblenden lassen
 
 : add master dict
 
-X list icon
+- suche fertigstellen
 
-X robot-snippet icon
-
-X robot-snippet fixen
+- tooltip nach 1 sekunde wenn über tree node
