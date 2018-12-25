@@ -99,13 +99,9 @@ class regBrowser(tk.LabelFrame):
             key = self.tree.set(sel, "key")
             subKey = self.tree.set(sel, "subKey")
 
-            print(key, subKey)
-
             if len(subKey) >= 1:
                 if subKey[0] == "\\":
                     subKey = subKey[1:]
-
-            print(key, subKey)
 
             if hasattr(winreg, key):
                 regKey = winreg.OpenKey(getattr(winreg, key), subKey)
