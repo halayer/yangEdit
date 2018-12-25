@@ -23,7 +23,7 @@ class pathBrowser(tk.LabelFrame):
     def __init__(self, master=None, path=None, onFileClick=None):
         tk.LabelFrame.__init__(self, master, text="Path Browser")
 
-        if path is None:
+        if not path:
             path = os.getcwd()
 
         self.path = path.replace("\\", "/")
