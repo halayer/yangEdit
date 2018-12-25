@@ -29,6 +29,7 @@ import notebook
 import updater
 import dict2robot
 import utils
+import yangTools
 
 getExc = traceback.format_exc
 
@@ -54,6 +55,7 @@ class yangEditApp(tix.Tk):
         self.tabDict = refTypes.refDict({})
         self.jsonData = None
         self.toOpen = list(toOpen)
+        self.hideNames = list()
         self.fileDict = dict()
         self.widgets = dict()
         self.regAvailable = regAvailable
@@ -209,6 +211,22 @@ class yangEditApp(tix.Tk):
         except:
             return
 
+    def hide(self):
+        for name, varName in self.hideNames:
+            try:
+                if not getattr(self, varName).get():
+                    settings.hideList.remove(name)
+                else:
+                    if not name in settings.hideList:
+                        settings.hideList.append(name)
+            except:
+                continue
+
+        settings.changeSetting("hideList", settings.hideList)
+
+        for tab in self.tabDict.values():
+            tab.update()
+
     def pathBrowser(self):
         path = fileDialog.askdirectory(title="Select a directory")
 
@@ -343,6 +361,23 @@ class yangEditApp(tix.Tk):
         self.editMenu = tk.Menu(self.menu, tearoff=False)
 
         self.editMenu.add_command(label="Search", command=self.search,
+                                  image=self.triImg, compound=tk.LEFT)
+
+        self.hideMenu = tk.Menu(self.editMenu, tearoff=False)
+
+        for yangType in yangTools.YANG_TYPES:
+            varName = "hide{}".format(yangType.title())
+            
+            setattr(self, varName, tk.IntVar(value=yangType in settings.hideList))
+
+            self.hideNames.append([yangType, varName])
+            
+            self.hideMenu.add_checkbutton(label=yangType, command=self.hide,
+                                          variable=getattr(self, varName),
+                                          image=self.triImg,
+                                          compound=tk.LEFT)
+
+        self.editMenu.add_cascade(label="Hide YANG type", menu=self.hideMenu,
                                   image=self.triImg, compound=tk.LEFT)
         
         self.optMenu = settings.optMenu(self.menu, self.tabDict)
