@@ -2,7 +2,8 @@ YANG_VALUE_TYPES = frozenset({"string", "uint64", "uint32", "uint16", "union",
                               "empty", "bits"})
 
 YANG_TYPES = frozenset({"leaf", "leaf-list", "choice", "container", "case",
-                        "output", "input", "notification"})
+                        "output", "input", "notification", "anyxml", "list",
+                        "leaflist"})
 
 IMG_TRANS_DICT = {"string": "data/str.png", "uint64": "data/int.png",
                   "uint32": "data/int.png", "uint16": "data/int.png",
