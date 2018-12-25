@@ -18,20 +18,22 @@ class optMenu(tk.Menu):
         self.propPanel = tk.BooleanVar()
         self.showPrefix = tk.BooleanVar()
         self.pathBrowser = tk.BooleanVar()
+        self.toolTips = tk.BooleanVar()
 
         if not isinstance(tabs, refTypes.refDict):
             raise TypeError("'tabs' has to be a instance of refTypes.refDict.")
 
         self.all = {"show__node__": self.show__node__, "propPanel": self.propPanel,
-                    "showPrefix": self.showPrefix, "pathBrowser": self.pathBrowser}
+                    "showPrefix": self.showPrefix, "pathBrowser": self.pathBrowser,
+                    "toolTips": self.toolTips}
 
         self.texts = {"Show '__node__' (senseless)": self.show__node__,
                       "Show YANG property panel": self.propPanel,
                       "Show prefix": self.showPrefix,
-                      "Show path browser": self.pathBrowser}
+                      "Show path browser": self.pathBrowser,
+                      "Show Tooltips on YANG nodes": self.toolTips}
 
         self.tabs = tabs
-        print(self.tabs)
 
         self.getSettings()
         self._insertBtns()
@@ -58,6 +60,8 @@ def loadSettings(fileName=SETTINGS_FILE):
     global propPanel
     global showPrefix
     global pathBrowser
+    global hideList
+    global toolTips
     global __data
     
     with open(fileName) as file:
@@ -67,12 +71,14 @@ def loadSettings(fileName=SETTINGS_FILE):
     propPanel = __data["propPanel"]
     showPrefix = __data["showPrefix"]
     pathBrowser = __data["pathBrowser"]
+    hideList = __data["hideList"]
+    toolTips = __data["toolTips"]
 
 def changeSetting(key, value, fileName=SETTINGS_FILE):
     __data[key] = value
 
     with open(fileName, "w") as file:
-        file.write(json.dumps(__data))
+        file.write(json.dumps(__data, indent=4))
 
     loadSettings()
 
