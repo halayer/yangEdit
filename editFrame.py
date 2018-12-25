@@ -21,13 +21,13 @@ import settings
 import dict2robot
 import utils
 import os
-
-NoneType = type(None)
+import tooltip
 
 
 class editFrame(tk.Frame):
 
-    def __init__(self, file=None, data=None, master=None):
+    def __init__(self, file=None, data=None, master=None,
+                 hideList=list()):
         tk.Frame.__init__(self, master)
 
         self.loaded = False
@@ -37,19 +37,13 @@ class editFrame(tk.Frame):
                 self.file = file
         else:
             self.jsonObj = data; self.loaded = True
-
-##        self.name = dict(); self.nameCounter = 0
-##        self.prefix = dict(); self.prefixCounter = 0
-##        self.mandatory = dict(); self.mandatoryCounter = 0
-##        self.type = dict(); self.typeCounter = 0
-##        self.key = dict(); self.keyCounter = 0
-##        self.keys = dict(); self.keysCounter = 0
-##        self.value_type = dict(); self.value_typeCounter = 0
+            
         self.props = {"name": [], "prefix": [], "mandatory": [], \
                       "type": [], "key": [], "keys": [], "value_type": []}
 
         self.cProps = None
         self.realNames = dict()
+        self.hideList = hideList
 
         self._loadImgs()
         self._loadData()
@@ -216,6 +210,9 @@ class editFrame(tk.Frame):
 
     def _advancedInsert(self, var, parent="", name="", lastPrefix="", opened=False):
         if isinstance(var, dict):
+            if yangTools.type(var) in self.hideList:
+                return
+            
             if not name:
                 if settings.showPrefix:
                     treeName = yangTools.name(var, False)
@@ -379,6 +376,9 @@ class editFrame(tk.Frame):
         sel = self.tree.tree.identify("item", event.x, event.y)
 
         index = self._getIndex(sel)
+
+        if not index: return
+        
         propsIndex = index.copy()
         propsIndex.insert(0, "__node__")
 
@@ -391,10 +391,6 @@ class editFrame(tk.Frame):
             menu.add_command(label="Set YANG Properties",
                              command=lambda: self._setProps(index, sel, event),
                              image=self.triImg, compound=tk.LEFT, state=tk.DISABLED)
-            menu.add_command(label="container2dict",
-                             command=lambda: self.container2dict(index),
-                             image=self.containerImg, compound=tk.LEFT,
-                             state=tk.DISABLED)
             menu.add_command(label="Robot Snippet",
                              command=lambda: self.robotSnippet(index),
                              image=self.robotImg, compound=tk.LEFT,
@@ -408,18 +404,16 @@ class editFrame(tk.Frame):
             menu.add_command(label="Set YANG Properties",
                              command=lambda: self._setProps(index, sel, event),
                              image=self.triImg, compound=tk.LEFT)
-            menu.add_command(label="container2dict",
-                             command=lambda: self.container2dict(index),
-                             image=self.containerImg, compound=tk.LEFT,
-                             state=tk.NORMAL if props.get("type", "").upper() \
-                             == "CONTAINER" else tk.DISABLED)
             menu.add_command(label="Robot Snippet",
                              command=lambda: self.robotSnippet(index),
                              image=self.robotImg, compound=tk.LEFT)
 
+        menu.add_command(label="Data2Dict", command=lambda: self.data2dict(index),
+                         image=self.triImg, compound=tk.LEFT)
+
         menu.tk_popup(event.x_root, event.y_root)
 
-    def container2dict(self, index):
+    def data2dict(self, index):
         data = self._getAt(index)
 
         def copyToClip():
@@ -432,7 +426,7 @@ class editFrame(tk.Frame):
             return
 
         root = tk.Toplevel(self)
-        root.title("container2dict")
+        root.title("data2dict")
         root.iconbitmap("data/icon.ico")
 
         st = tkst.ScrolledText(root)
@@ -581,6 +575,8 @@ class editFrame(tk.Frame):
             self._delAt(index, propName)
         
     def update(self):
+        treeSel = self.tree.tree.selection()
+        
         self.tree.destroy()
 
         if hasattr(self, "propPanel"):
@@ -591,6 +587,12 @@ class editFrame(tk.Frame):
 
         self._loadData()
         self._createWidgets()
+
+        if treeSel:
+            try:
+                self.tree.tree.see(treeSel)
+            except:
+                pass
 
     def save(self):
         with open(self.file, "w") as file:
@@ -670,9 +672,44 @@ class editFrame(tk.Frame):
 
         panel.pack()
 
+    def treeToolTip(self):
+        item = self.tree.tree.identify("item", self.winfo_pointerx(),
+                                       self.winfo_pointery())
+
+        index = self._getIndex(item)
+
+        if not index:
+            self.tree.tree.after(1500, self.treeToolTip)
+            
+            return
+        
+        props = self._getAt(index)
+
+        txt = list()
+
+        for k, v in props.get("__node__",  {}).items():
+            txt.append(k + ": " + v)
+
+        txt = "\n".join(txt)
+
+        t = tooltip.toolTip(self, txt, (self.winfo_pointerx(),
+                            self.winfo_pointery()), 3000)
+
+        t.focus_force()
+        t.focus_get()
+        t.focus_set()
+        t.focus()
+
+        self.tree.tree.after(1500, self.treeToolTip)
+
     def _createWidgets(self):
+        self.hideList = settings.hideList
+        
         self.tree = scrolledTree.scrolledTree(self, columns=("type",),
                                               selectmode="extended")
+
+        if settings.toolTips:
+            tooltip.createToolTip(self.tree.tree)
         
         self.tree.tree.heading("#0", text="Name")
         self.tree.tree.heading("type", text="Type")
