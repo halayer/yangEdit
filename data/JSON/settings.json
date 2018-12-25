@@ -1,1 +1,8 @@
-{"show__node__": false, "propPanel": true, "showPrefix": true, "pathBrowser": false}
+{
+    "show__node__": false,
+    "propPanel": true,
+    "showPrefix": true,
+    "pathBrowser": false,
+    "hideList": [],
+    "toolTips": true
+}
