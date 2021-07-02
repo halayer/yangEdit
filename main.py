@@ -26,7 +26,6 @@ import toolBar
 from urllib.request import urlopen
 import traceback
 import notebook
-import updater
 import dict2robot
 import utils
 import yangTools
@@ -441,7 +440,5 @@ if __name__ == "__main__":
                 msgBox.showinfo("TODO list", file.read(), master=app)
     except:
         pass
-
-    updater.main(app)
     
     app.mainloop()
